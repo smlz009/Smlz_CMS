@@ -2,6 +2,7 @@
   <div class="main">
     <h2>{{ counterStore.counter }}</h2>
     <button @click="changeCounter">改变</button>
+    <el-button type="info">66</el-button>
   </div>
 </template>
 
