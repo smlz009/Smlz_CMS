@@ -1,22 +1,23 @@
 <template>
   <div :class="['pane-account', isLogin ? '' : 'active']">
     <transition name="slide">
-      <div v-if="isLogin">
+      <el-form :model="account" :rules="accountRules" ref="formRef" v-if="isLogin">
         <div class="login-title">欢迎登陆</div>
-        <el-input
-          placeholder="帐号"
-          class="login-account"
-          size="large"
-          v-model="account.name"
-        ></el-input>
-        <el-input
-          placeholder="密码"
-          size="large"
-          show-password
-          v-model="account.password"
-        ></el-input>
-        <el-button class="login-btn">登陆</el-button>
-      </div>
+        <el-form-item prop="name">
+          <el-input placeholder="帐号" size="large" v-model="account.name"></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            placeholder="密码"
+            size="large"
+            show-password
+            v-model="account.password"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button class="login-btn" @click="loginAction">登陆</el-button>
+        </el-form-item>
+      </el-form>
       <el-button v-else class="no-btn" @click="emit('update:isLogin', true)">
         已有帐号,直接登陆
       </el-button>
@@ -25,14 +26,40 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { ref, reactive } from 'vue'
+import { ElMessage } from 'element-plus'
+import type { FormRules, ElForm } from 'element-plus'
 defineProps(['isLogin'])
 const emit = defineEmits(['update:isLogin'])
+
+interface accountForm {
+  name: string
+  password: string
+}
 
 const account = reactive({
   name: '',
   password: ''
 })
+
+const formRef = ref<InstanceType<typeof ElForm>>()
+
+//表单规则
+const accountRules: FormRules = {
+  name: [{ required: true, message: '请输入帐号', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+}
+
+//点击登录 校验表单
+function loginAction() {
+  formRef.value?.validate((valid) => {
+    if (valid) {
+      console.log('cg')
+    } else {
+      ElMessage.error('请填写完整信息，并且进行校验')
+    }
+  })
+}
 </script>
 
 <style scoped lang="less">
@@ -55,9 +82,6 @@ const account = reactive({
     padding-bottom: 20px;
     font-size: 22px;
     text-align: center;
-  }
-  .login-account {
-    margin-bottom: 20px;
   }
   .login-btn {
     width: 6vw;

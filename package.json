@@ -17,6 +17,7 @@
     "element-plus": "^2.3.8",
     "normalize.css": "^8.0.1",
     "pinia": "^2.1.4",
+    "vite-plugin-style-import": "^2.0.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"
   },
@@ -28,6 +29,7 @@
     "@vue/eslint-config-prettier": "^7.1.0",
     "@vue/eslint-config-typescript": "^11.0.3",
     "@vue/tsconfig": "^0.4.0",
+    "consola": "^3.2.3",
     "eslint": "^8.39.0",
     "eslint-plugin-vue": "^9.11.0",
     "less": "^4.1.3",
