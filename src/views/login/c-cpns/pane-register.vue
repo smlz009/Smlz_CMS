@@ -1,16 +1,16 @@
 <template>
-  <div class="pane-register">
-    <div :class="['register-warp', !isLogin ? '' : 'active']">
+  <div :class="['pane-register', !isLogin ? '' : 'active']">
+    <transition name="slide">
       <div v-if="!isLogin">
-        <div class="login-title">注册账号</div>
-        <el-input placeholder="账号" class="login-account"></el-input>
-        <el-input placeholder="密码"></el-input>
-        <el-button class="login-btn">点击注册</el-button>
+        <div class="register-title">注册帐号</div>
+        <el-input placeholder="帐号" class="register-account" size="large"></el-input>
+        <el-input placeholder="密码" size="large"></el-input>
+        <el-button class="register-btn">点击注册</el-button>
       </div>
       <el-button v-else class="no-btn" @click="emit('update:isLogin', false)">
-        没有账号,点击注册
+        没有帐号,点击注册
       </el-button>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -20,35 +20,42 @@ const emit = defineEmits(['update:isLogin'])
 </script>
 
 <style scoped lang="less">
-.register-warp {
-  width: calc(20vw - 40px);
+.slide-enter-active {
+  transition: all 0.5s ease;
+}
+
+.slide-enter-from {
+  transform: translateX(100%);
+}
+
+.pane-register {
+  width: calc(50% - 40px);
   height: 100%;
   background: rgba(255, 255, 255);
   padding: 0px 20px;
   border-radius: 0px 20px 20px 0px;
-  .login-title {
+  .register-title {
     padding-top: 40px;
     padding-bottom: 20px;
     font-size: 22px;
     text-align: center;
   }
-  .login-account {
+  .register-account {
     margin-bottom: 20px;
     height: 40px;
   }
-  .login-btn {
+  .register-btn {
     width: 6vw;
     margin-top: 20px;
     margin-left: 50%;
     transform: translateX(-50%);
   }
-}
-.no-btn {
-  width: 10vw;
-  margin-top: 50%;
-  margin-left: 50%;
-  transform: translate(-50%, -100%);
-  background: rgba(255, 255, 255, 0.8);
+  .no-btn {
+    width: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    margin-left: 50%;
+    transform: translate(-50%, 450%);
+  }
 }
 .active {
   background-color: transparent;

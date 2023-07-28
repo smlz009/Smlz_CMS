@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <h2 class="login-title">Smlz CMS</h2>
     <login-panel></login-panel>
   </div>
 </template>
@@ -15,7 +16,12 @@ import LoginPanel from './c-cpns/login-panel.vue'
     center;
   background-size: cover;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  .login-title {
+    font-size: 36px;
+    padding-bottom: 50px;
+    margin-top: 20vh;
+  }
 }
 </style>
