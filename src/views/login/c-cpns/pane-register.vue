@@ -1,12 +1,12 @@
 <template>
   <div :class="['pane-register', !isLogin ? '' : 'active']">
     <transition name="slide">
-      <div v-if="!isLogin">
+      <el-form v-if="!isLogin">
         <div class="register-title">注册帐号</div>
         <el-input placeholder="帐号" class="register-account" size="large"></el-input>
         <el-input placeholder="密码" size="large"></el-input>
-        <el-button class="register-btn">点击注册</el-button>
-      </div>
+        <el-button @click="registerAction" class="register-btn">点击注册</el-button>
+      </el-form>
       <el-button v-else class="no-btn" @click="emit('update:isLogin', false)">
         没有帐号,点击注册
       </el-button>
@@ -15,8 +15,13 @@
 </template>
 
 <script setup lang="ts">
+import { ElMessage } from 'element-plus'
 defineProps(['isLogin'])
 const emit = defineEmits(['update:isLogin'])
+
+function registerAction() {
+  ElMessage.error('暂无注册功能，请使用默认帐号')
+}
 </script>
 
 <style scoped lang="less">
