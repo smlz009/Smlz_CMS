@@ -38,7 +38,7 @@ function registerAction() {
   height: 100%;
   background: rgba(255, 255, 255);
   padding: 0px 20px;
-  border-radius: 0px 20px 20px 0px;
+  border-radius: 0px 10px 10px 0px;
   .register-title {
     padding-top: 40px;
     padding-bottom: 20px;

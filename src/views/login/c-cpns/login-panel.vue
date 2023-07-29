@@ -24,7 +24,7 @@ const isLogin = ref(true)
   background: url('https://dogefs.s3.ladydaily.com/~/source/wallhaven/full/x6/wallhaven-x67mkz.png?w=2560&h=1440&fmt=webp');
   background-size: cover;
   display: flex;
-  border-radius: 20px;
+  border-radius: 10px;
   overflow: hidden;
 }
 </style>

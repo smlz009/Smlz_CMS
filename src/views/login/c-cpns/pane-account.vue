@@ -29,19 +29,21 @@
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { FormRules, ElForm } from 'element-plus'
+import useLoginStore from '@/store/login/login'
+import type { IAccount } from '@/types'
+
 defineProps(['isLogin'])
 const emit = defineEmits(['update:isLogin'])
 
-interface accountForm {
-  name: string
-  password: string
-}
+const loginStore = useLoginStore()
 
-const account = reactive({
-  name: '',
-  password: ''
+//登录数据
+const account = reactive<IAccount>({
+  name: 'coderwhy',
+  password: '123456'
 })
 
+//获取表单ref
 const formRef = ref<InstanceType<typeof ElForm>>()
 
 //表单规则
@@ -54,7 +56,9 @@ const accountRules: FormRules = {
 function loginAction() {
   formRef.value?.validate((valid) => {
     if (valid) {
-      console.log('cg')
+      const { name, password } = account
+      //发送异步请求 进行登陆
+      loginStore.loginAccountAction({ name, password })
     } else {
       ElMessage.error('请填写完整信息，并且进行校验')
     }
@@ -76,7 +80,7 @@ function loginAction() {
   height: 100%;
   background: rgba(255, 255, 255);
   padding: 0px 20px;
-  border-radius: 20px 0 0 20px;
+  border-radius: 10px 0 0 10px;
   .login-title {
     padding-top: 40px;
     padding-bottom: 20px;

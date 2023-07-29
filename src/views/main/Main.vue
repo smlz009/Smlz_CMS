@@ -1,28 +1,20 @@
 <template>
-  <div class="main">
-    <h2>{{ counterStore.counter }}</h2>
-    <button @click="changeCounter">改变</button>
-    <el-button type="info">66</el-button>
-  </div>
+  <div class="main">main</div>
+  <el-button @click="exitAction">退出登录</el-button>
 </template>
 
 <script setup lang="ts">
-import useCounterStore from '@/store/counter'
-import $request from '@/service'
+import { LOGIN_TOKEN } from '@/global/constants'
+import { localCache } from '@/utils/cache'
+import { useRouter } from 'vue-router'
 
-const counterStore = useCounterStore()
+const router = useRouter()
 
-const changeCounter = () => {
-  counterStore.changeCounterAction(66)
+//退出登录
+function exitAction() {
+  localCache.removeCache(LOGIN_TOKEN)
+  router.push('/login')
 }
-
-$request
-  .request({
-    url: 'home/goodprice'
-  })
-  .then((res) => {
-    console.log(res)
-  })
 </script>
 
 <style scoped></style>
