@@ -1,34 +1,29 @@
 <template>
   <div class="main">
     <el-container class="main-content">
-      <el-aside width="240px">
-        <main-menu />
+      <el-aside :width="isCollapse ? '60px' : '210px'">
+        <main-menu :isCollapse="isCollapse" />
       </el-aside>
       <el-container>
         <el-header height="50px">
-          <main-header />
+          <main-header @fold-change="handleFoldMenu" />
         </el-header>
         <el-main>Main</el-main>
       </el-container>
     </el-container>
   </div>
-  <!-- <el-button @click="exitAction">退出登录</el-button> -->
 </template>
 
 <script setup lang="ts">
 import MainMenu from '@/components/main-menu/main-menu.vue'
 import MainHeader from '@/components/main-header/main-header.vue'
-// import { LOGIN_TOKEN } from '@/global/constants'
-// import { localCache } from '@/utils/cache'
-// import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 
-// const router = useRouter()
+const isCollapse = ref(false) //菜单是否缩放
 
-//退出登录
-// function exitAction() {
-//   localCache.removeCache(LOGIN_TOKEN)
-//   router.push('/login')
-// }
+function handleFoldMenu(isFold: boolean) {
+  isCollapse.value = isFold
+}
 </script>
 
 <style scoped lang="less">

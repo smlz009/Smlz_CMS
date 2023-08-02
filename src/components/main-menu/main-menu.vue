@@ -2,7 +2,7 @@
   <div class="main-menu">
     <div class="logo">
       <img class="img" src="@/assets/img/logo.png" alt="" />
-      <h2 class="title">Smlz CMS</h2>
+      <h2 class="title" v-show="!isCollapse">Smlz CMS</h2>
     </div>
     <div class="menu">
       <el-menu
@@ -10,6 +10,7 @@
         text-color="#b7bdc3"
         active-text-color="#fff"
         background-color="#001529"
+        :collapse="isCollapse"
       >
         <el-sub-menu :index="item.id + ''" v-for="item in userMenus" :key="item.id">
           <template #title>
@@ -30,6 +31,13 @@
 <script setup lang="ts">
 import useLoginStore from '@/store/login/login'
 
+defineProps({
+  isCollapse: {
+    type: Boolean,
+    default: false
+  }
+})
+
 //获取动态菜单
 const loginStore = useLoginStore()
 const userMenus = loginStore.userMenus
@@ -38,7 +46,7 @@ const userMenus = loginStore.userMenus
 <style lang="less" scoped>
 .logo {
   display: flex;
-  height: 35px;
+  height: 25px;
   padding: 12px 10px 8px 10px;
   align-items: center;
   overflow: hidden;
@@ -49,7 +57,7 @@ const userMenus = loginStore.userMenus
   }
 
   .title {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
     color: white;
     white-space: nowrap;
