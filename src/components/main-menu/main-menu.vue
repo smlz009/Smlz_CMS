@@ -19,7 +19,12 @@
             </el-icon>
             <span>{{ item.name }}</span>
           </template>
-          <el-menu-item v-for="c in item.children" :key="c.id" :index="c.id + ''">
+          <el-menu-item
+            v-for="c in item.children"
+            :key="c.id"
+            :index="c.id + ''"
+            @click="handelMenuClick(c)"
+          >
             {{ c.name }}
           </el-menu-item>
         </el-sub-menu>
@@ -30,6 +35,7 @@
 
 <script setup lang="ts">
 import useLoginStore from '@/store/login/login'
+import { useRouter } from 'vue-router'
 
 defineProps({
   isCollapse: {
@@ -38,9 +44,15 @@ defineProps({
   }
 })
 
+const router = useRouter()
+
 //获取动态菜单
 const loginStore = useLoginStore()
 const userMenus = loginStore.userMenus
+
+function handelMenuClick(item: any) {
+  router.push(item.url)
+}
 </script>
 
 <style lang="less" scoped>
