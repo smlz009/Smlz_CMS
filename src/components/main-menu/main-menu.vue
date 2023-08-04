@@ -6,7 +6,7 @@
     </div>
     <div class="menu">
       <el-menu
-        default-active="4"
+        :default-active="defaultActive"
         text-color="#b7bdc3"
         active-text-color="#fff"
         background-color="#001529"
@@ -34,8 +34,10 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import useLoginStore from '@/store/login/login'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import { mapPathMenu } from '@/utils/map-menus'
 
 defineProps({
   isCollapse: {
@@ -45,14 +47,21 @@ defineProps({
 })
 
 const router = useRouter()
+const route = useRoute()
 
 //获取动态菜单
 const loginStore = useLoginStore()
 const userMenus = loginStore.userMenus
 
+const activeMenu = mapPathMenu(route.path, userMenus)
+
+//跳转页面
 function handelMenuClick(item: any) {
   router.push(item.url)
 }
+
+//菜单默认弹出
+const defaultActive = ref(activeMenu.id + '')
 </script>
 
 <style lang="less" scoped>

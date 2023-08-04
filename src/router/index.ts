@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { LOGIN_TOKEN } from '@/global/constants'
 import { localCache } from '@/utils/cache'
+import { firstMenu } from '@/utils/map-menus'
 
 const router = createRouter({
   history: createWebHashHistory(), //hash模式
@@ -15,17 +16,8 @@ const router = createRouter({
     },
     {
       path: '/main',
-      component: () => import('@/views/main/main.vue'),
-      children: [
-        {
-          path: '/main/analysis/overview',
-          component: () => import('@/views/main/analysis/overview/overview.vue')
-        },
-        {
-          path: '/main/analysis/dashboard',
-          component: () => import('@/views/main/analysis/dashboard/dashboard.vue')
-        }
-      ]
+      name: 'main',
+      component: () => import('@/views/main/main.vue')
     },
     {
       path: '/:patchMatch(.*)',
@@ -37,8 +29,12 @@ const router = createRouter({
 //导航守卫
 router.beforeEach((to) => {
   const token = localCache.getCache(LOGIN_TOKEN)
-  if (to.path === '/main' && !token) {
+  if (to.path.startsWith('/main') && !token) {
     return '/login'
+  }
+
+  if (to.path === '/main') {
+    return firstMenu.url
   }
 })
 

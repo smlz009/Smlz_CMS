@@ -48,6 +48,8 @@ const ruter = useRouter()
 //退出登录
 function handleExit() {
   localCache.removeCache(LOGIN_TOKEN)
+  localCache.removeCache('USER_INFO')
+  localCache.removeCache('USER_MENUS')
   ruter.push('/login')
 }
 </script>
