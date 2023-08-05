@@ -23,6 +23,9 @@ export function mapMenusToRoutes(userMenus: any[]) {
     for (const subMenu of menu.children) {
       const route = localRoutes.find((item) => item.path === subMenu.url)
       if (route) {
+        if (!routes.find((item) => item.path === menu.url)) {
+          routes.push({ path: menu.url, redirect: route.path })
+        }
         routes.push(route)
       }
       if (!firstMenu && route) {
@@ -42,4 +45,19 @@ export function mapPathMenu(path: string, userMenus: any[]) {
       }
     }
   }
+}
+
+//映射路径到面包屑
+export function mapPathCrumb(path: string, userMenus: any[]) {
+  const crumbList: any[] = []
+  for (const menu of userMenus) {
+    for (const subMenu of menu.children) {
+      if (subMenu.url === path) {
+        crumbList.push({ name: menu.name, path: menu.url })
+        crumbList.push({ name: subMenu.name, path: subMenu.url })
+      }
+    }
+  }
+
+  return crumbList
 }

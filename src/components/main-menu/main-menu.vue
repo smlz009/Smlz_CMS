@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
 import useLoginStore from '@/store/login/login'
 import { useRouter, useRoute } from 'vue-router'
 import { mapPathMenu } from '@/utils/map-menus'
@@ -53,15 +53,16 @@ const route = useRoute()
 const loginStore = useLoginStore()
 const userMenus = loginStore.userMenus
 
-const activeMenu = mapPathMenu(route.path, userMenus)
-
 //跳转页面
 function handelMenuClick(item: any) {
   router.push(item.url)
 }
 
 //菜单默认弹出
-const defaultActive = ref(activeMenu.id + '')
+const defaultActive = computed(() => {
+  const activeMenu = mapPathMenu(route.path, userMenus)
+  return activeMenu.id + ''
+})
 </script>
 
 <style lang="less" scoped>
