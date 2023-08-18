@@ -2,10 +2,10 @@
   <div class="content">
     <div class="header">
       <h2 class="title">用户列表</h2>
-      <el-button type="primary">新建用户</el-button>
+      <el-button type="primary" @click="handleNewUserClick">新建用户</el-button>
     </div>
     <div class="table">
-      <el-table :data="usersList" border style="width: 100%">
+      <el-table :data="usersList" border style="width: 100%" height="500">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column type="index" label="序号" width="55" align="center" />
         <el-table-column prop="name" label="Name" align="center" width="200" />
@@ -29,12 +29,27 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="150" align="center">
-          <el-button icon="Edit" type="primary" link>编辑</el-button>
-          <el-button icon="Delete" type="danger" link>删除</el-button>
+          <template #default="scope">
+            <el-button icon="Edit" type="primary" link>编辑</el-button>
+            <el-button icon="Delete" type="danger" link @click="handleDeleteBtnClick(scope.row.id)">
+              删除
+            </el-button>
+          </template>
         </el-table-column>
       </el-table>
     </div>
-    <div class="header">分页</div>
+    <div class="pagination">
+      <el-pagination
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        :page-sizes="[10, 20, 30]"
+        small
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="userTotalCount"
+        @size-change="fetchUsersListData"
+        @current-change="fetchUsersListData"
+      />
+    </div>
   </div>
 </template>
 
@@ -42,18 +57,45 @@
 import useSystemStore from '@/store/main/system/system'
 import { storeToRefs } from 'pinia'
 import { formatUTC } from '@/utils/format'
+import { ref } from 'vue'
+
+const emit = defineEmits(['newClick'])
 
 const systemStore = useSystemStore()
+//页面相关数据
+const currentPage = ref(1)
+const pageSize = ref(10)
 
-systemStore.postUsersListAction()
+//获取用户列表数据
+fetchUsersListData()
 
 //获取用户列表
-const { usersList } = storeToRefs(systemStore)
+const { usersList, userTotalCount } = storeToRefs(systemStore)
+
+//异步用户数据
+function fetchUsersListData(formData: any = {}) {
+  const size = pageSize.value
+  const offset = (currentPage.value - 1) * size
+  const queryInfo = { size, offset, ...formData }
+  systemStore.postUsersListAction(queryInfo)
+}
+
+//监听数据删除
+function handleDeleteBtnClick(id: number) {
+  systemStore.deleteUserByIdAction(id)
+}
+
+//新建用户弹框
+function handleNewUserClick() {
+  emit('newClick')
+}
+
+defineExpose({ fetchUsersListData })
 </script>
 
 <style scoped lang="less">
 .content {
-  margin-top: 15px;
+  margin-top: 12px;
   padding: 15px;
   background-color: #fff;
   border-radius: 5px;
@@ -69,6 +111,12 @@ const { usersList } = storeToRefs(systemStore)
     :deep(.el-table__cell) {
       padding: 10px 0;
     }
+  }
+
+  .pagination {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
   }
 }
 </style>
