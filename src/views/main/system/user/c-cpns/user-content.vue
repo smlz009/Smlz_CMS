@@ -30,7 +30,9 @@
         </el-table-column>
         <el-table-column label="操作" width="150" align="center">
           <template #default="scope">
-            <el-button icon="Edit" type="primary" link>编辑</el-button>
+            <el-button icon="Edit" type="primary" link @click="handleEditBtnClick(scope.row.id)">
+              编辑
+            </el-button>
             <el-button icon="Delete" type="danger" link @click="handleDeleteBtnClick(scope.row.id)">
               删除
             </el-button>
@@ -88,6 +90,11 @@ function handleDeleteBtnClick(id: number) {
 //新建用户弹框
 function handleNewUserClick() {
   emit('newClick')
+}
+
+//编辑用户
+function handleEditBtnClick(id: number) {
+  console.log(id)
 }
 
 defineExpose({ fetchUsersListData })

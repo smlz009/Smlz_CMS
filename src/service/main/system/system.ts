@@ -12,3 +12,10 @@ export function deleteUserById(id: number) {
     url: `/users/${id}`
   })
 }
+
+export function newUserData(userInfo: any) {
+  return $request.post({
+    url: `/users`,
+    data: userInfo
+  })
+}

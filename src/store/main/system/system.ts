@@ -1,5 +1,6 @@
-import { postUsersListData, deleteUserById } from '@/service/main/system/system'
+import { postUsersListData, deleteUserById, newUserData } from '@/service/main/system/system'
 import { defineStore } from 'pinia'
+import { ElMessage } from 'element-plus'
 
 interface IsystemState {
   usersList: any[]
@@ -12,7 +13,7 @@ const useSystemStore = defineStore('system', {
     userTotalCount: 0
   }),
   actions: {
-    async postUsersListAction(data: any = {}) {
+    async postUsersListAction(data: any) {
       const res = await postUsersListData(data)
       const { totalCount, list } = res.data
       this.userTotalCount = totalCount
@@ -20,7 +21,23 @@ const useSystemStore = defineStore('system', {
     },
     async deleteUserByIdAction(id: number) {
       const res = await deleteUserById(id)
-      this.postUsersListAction()
+      if (res.code == 0) {
+        ElMessage({
+          type: 'success',
+          message: res.data
+        })
+        this.postUsersListAction({ offset: 0, size: 10 })
+      }
+    },
+    async newUserDataAction(data: any) {
+      const res = await newUserData(data)
+      if (res.code == 0) {
+        ElMessage({
+          type: 'success',
+          message: res.data
+        })
+        this.postUsersListAction({ offset: 0, size: 10 })
+      }
     }
   }
 })
