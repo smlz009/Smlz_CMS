@@ -3,26 +3,13 @@
     <el-form size="large" label-width="80px" :model="searchFrom" ref="formRef">
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="用户名" prop="name">
+          <el-form-item label="部门名称" prop="name">
             <el-input placeholder="帐号" v-model="searchFrom.name"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="真实姓名" prop="realname">
-            <el-input placeholder="真实姓名" v-model="searchFrom.realname"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="电话号码" prop="cellphone">
-            <el-input placeholder="电话号码" v-model="searchFrom.cellphone"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="状态" prop="enable">
-            <el-select placeholder="状态" style="width: 100%" v-model="searchFrom.enable">
-              <el-option label="启用" :value="1" />
-              <el-option label="禁用" :value="2" />
-            </el-select>
+          <el-form-item label="部门领导" prop="leader">
+            <el-input placeholder="真实姓名" v-model="searchFrom.leader"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -53,9 +40,7 @@ const emit = defineEmits(['queryClick', 'resetClick'])
 
 const searchFrom = reactive({
   name: '',
-  realname: '',
-  cellphone: '',
-  enable: 1,
+  leader: '',
   createAt: ''
 })
 const formRef = ref<InstanceType<typeof ElForm>>()

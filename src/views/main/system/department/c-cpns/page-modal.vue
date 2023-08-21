@@ -2,33 +2,20 @@
   <div class="modal">
     <el-dialog
       v-model="dialogVisble"
-      :title="isEditRef ? '编辑用户' : '新建用户'"
+      :title="isEditRef ? '编辑部门' : '新建部门'"
       center
       width="30%"
     >
       <div class="form">
         <el-form :model="formData" size="large" label-width="80">
-          <el-form-item label="用户名" prop="name">
-            <el-input v-model="formData.name" placeholder="请输入用户名"></el-input>
+          <el-form-item label="部门名称" prop="name">
+            <el-input v-model="formData.name" placeholder="请输入部门名称"></el-input>
           </el-form-item>
-          <el-form-item label="真实姓名" prop="realname">
-            <el-input v-model="formData.realname" placeholder="请输入真实姓名"></el-input>
+          <el-form-item label="部门领导" prop="leader">
+            <el-input v-model="formData.leader" placeholder="请输入部门领导"></el-input>
           </el-form-item>
-          <el-form-item label="密码" prop="password" v-if="!isEditRef">
-            <el-input v-model="formData.password" placeholder="请输入密码" show-password></el-input>
-          </el-form-item>
-          <el-form-item label="手机号码" prop="cellphone">
-            <el-input v-model="formData.cellphone" placeholder="请输入手机号码"></el-input>
-          </el-form-item>
-          <el-form-item label="选择角色" prop="roleId">
-            <el-select v-model="formData.roleId" placeholder="请选择角色" style="width: 100%">
-              <template v-for="item in entireRoles" :key="item.id">
-                <el-option :value="item.id" :label="item.name"></el-option>
-              </template>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="选择部门" prop="departmentId">
-            <el-select v-model="formData.departmentId" placeholder="请选择部门" style="width: 100%">
+          <el-form-item label="选择部门" prop="parentId">
+            <el-select v-model="formData.parentId" placeholder="请选择部门" style="width: 100%">
               <template v-for="item in entireDepartments" :key="item.id">
                 <el-option :value="item.id" :label="item.name"></el-option>
               </template>
@@ -55,16 +42,13 @@ import { storeToRefs } from 'pinia'
 const useMain = useMainStore()
 const systemStore = useSystemStore()
 
-const { entireRoles, entireDepartments } = storeToRefs(useMain)
+const { entireDepartments } = storeToRefs(useMain)
 
 const dialogVisble = ref(false)
 const formData = reactive<any>({
   name: '',
-  realname: '',
-  password: '',
-  cellphone: '',
-  roleId: '',
-  departmentId: ''
+  leader: '',
+  parentId: ''
 })
 
 const isEditRef = ref(false)
@@ -91,9 +75,9 @@ function setModalVisble(isEdit: boolean = false, itemData?: any) {
 function handleConfirm() {
   dialogVisble.value = false
   if (isEditRef.value && editId.value) {
-    systemStore.editUserDataAction(editId.value, formData)
+    systemStore.editPageDataAction('department', editId.value, formData)
   } else {
-    systemStore.newUserDataAction(formData)
+    systemStore.newPageDataAction('department', formData)
   }
 }
 

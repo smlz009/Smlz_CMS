@@ -5,19 +5,12 @@
       <el-button type="primary" @click="handleNewUserClick">新建用户</el-button>
     </div>
     <div class="table">
-      <el-table :data="usersList" border style="width: 100%" height="500">
+      <el-table :data="pageList" border style="width: 100%">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column type="index" label="序号" width="55" align="center" />
-        <el-table-column prop="name" label="Name" align="center" width="200" />
-        <el-table-column prop="realname" label="真实姓名" align="center" width="170" />
-        <el-table-column prop="cellphone" label="电话号码" align="center" />
-        <el-table-column prop="enable" label="状态" width="100" align="center">
-          <template #default="scope">
-            <el-button size="small" plain :type="scope.row.enable ? 'success' : 'danger'">
-              {{ scope.row.enable ? '启用' : '禁用' }}
-            </el-button>
-          </template>
-        </el-table-column>
+        <el-table-column prop="name" label="部门名称" align="center" width="200" />
+        <el-table-column prop="leader" label="部门领导" align="center" width="150" />
+        <el-table-column prop="parentId" label="上级部门" align="center" />
         <el-table-column prop="createAt" label="创建时间" align="center">
           <template #default="scope">
             {{ formatUTC(scope.row.createAt) }}
@@ -47,9 +40,9 @@
         :page-sizes="[10, 20, 30]"
         small
         layout="total, sizes, prev, pager, next, jumper"
-        :total="userTotalCount"
-        @size-change="fetchUsersListData"
-        @current-change="fetchUsersListData"
+        :total="pageTotalCount"
+        @size-change="fetchPageListData"
+        @current-change="fetchPageListData"
       />
     </div>
   </div>
@@ -69,22 +62,22 @@ const currentPage = ref(1)
 const pageSize = ref(10)
 
 //获取用户列表数据
-fetchUsersListData()
+fetchPageListData()
 
 //获取用户列表
-const { usersList, userTotalCount } = storeToRefs(systemStore)
+const { pageList, pageTotalCount } = storeToRefs(systemStore)
 
 //异步用户数据
-function fetchUsersListData(formData: any = {}) {
+function fetchPageListData(formData: any = {}) {
   const size = pageSize.value
   const offset = (currentPage.value - 1) * size
   const queryInfo = { size, offset, ...formData }
-  systemStore.postUsersListAction(queryInfo)
+  systemStore.postPageListAction('department', queryInfo)
 }
 
 //监听数据删除
 function handleDeleteBtnClick(id: number) {
-  systemStore.deleteUserByIdAction(id)
+  systemStore.deletePageDataByIdAction('department', id)
 }
 
 //新建用户弹框
@@ -97,7 +90,7 @@ function handleEditBtnClick(itemData: any) {
   emit('editClick', itemData)
 }
 
-defineExpose({ fetchUsersListData })
+defineExpose({ fetchPageListData })
 </script>
 
 <style scoped lang="less">
