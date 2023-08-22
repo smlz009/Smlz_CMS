@@ -5,16 +5,26 @@
       @reset-click="handleResetClick"
       :searchConfig="searchConfig"
     />
-    <page-content ref="contentRef" @new-click="handleNewClick" @edit-click="handleEditClick" />
+    <page-content
+      ref="contentRef"
+      :contentConfig="contentConfig"
+      @new-click="handleNewClick"
+      @edit-click="handleEditClick"
+    >
+      <template #name="scope">
+        <span class="name">{{ scope.row[scope.prop] }}</span>
+      </template>
+    </page-content>
     <page-modal ref="modalRef" />
   </div>
 </template>
 
 <script setup lang="ts">
 import PageSearch from '@/components/page-search/page-search.vue'
-import PageContent from './c-cpns/page-content.vue'
-import PageModal from './c-cpns/page-modal.vue'
+import PageContent from '@/components/page-content/page-content.vue'
+import PageModal from '@/components/page-modal/page-modal.vue'
 import searchConfig from './config/search.config'
+import contentConfig from './config/content.config'
 import { ref } from 'vue'
 
 const contentRef = ref<InstanceType<typeof PageContent>>()
@@ -37,5 +47,8 @@ function handleEditClick(itemData: any) {
 }
 </script>
 
-<style scoped lang="less"></style>
-./config/search.config
+<style scoped lang="less">
+.name {
+  color: pink;
+}
+</style>

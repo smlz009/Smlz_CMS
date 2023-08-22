@@ -9,12 +9,14 @@ class Cache {
     this.storage = type === CacheType.Local ? localStorage : sessionStorage
   }
 
+  // 设置缓存
   setCache(key: string, value: any) {
     if (value) {
       this.storage.setItem(key, JSON.stringify(value))
     }
   }
 
+  // 获取缓存
   getCache(key: string) {
     const value = this.storage.getItem(key)
     if (value) {
@@ -22,10 +24,12 @@ class Cache {
     }
   }
 
+  // 移除缓存
   removeCache(key: string) {
     this.storage.removeItem(key)
   }
 
+  // 清空缓存
   clear() {
     this.storage.clear()
   }
