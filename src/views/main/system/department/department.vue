@@ -15,7 +15,7 @@
         <span class="name">{{ scope.row[scope.prop] }}</span>
       </template>
     </page-content>
-    <page-modal ref="modalRef" />
+    <page-modal :modalConfig="modalConfigRef" ref="modalRef" />
   </div>
 </template>
 
@@ -25,10 +25,28 @@ import PageContent from '@/components/page-content/page-content.vue'
 import PageModal from '@/components/page-modal/page-modal.vue'
 import searchConfig from './config/search.config'
 import contentConfig from './config/content.config'
-import { ref } from 'vue'
+import modalConfig from './config/modal.config'
+import { ref, computed } from 'vue'
+import useMainStore from '@/store/main/mian'
 
 const contentRef = ref<InstanceType<typeof PageContent>>()
 const modalRef = ref<InstanceType<typeof PageModal>>()
+
+const modalConfigRef = computed(() => {
+  const useMain = useMainStore()
+  const departments = useMain.entireDepartments.map((option) => {
+    return {
+      label: option.name,
+      value: option.id
+    }
+  })
+  modalConfig.formItems.forEach((item) => {
+    if (item.prop === 'parentId') {
+      item.options = departments
+    }
+  })
+  return modalConfig
+})
 
 function handleQueryClick(formData: any) {
   contentRef.value?.fetchPageListData(formData)
