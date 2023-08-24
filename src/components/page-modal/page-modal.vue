@@ -90,9 +90,9 @@ function setModalVisble(isEdit: boolean = false, itemData?: any) {
 function handleConfirm() {
   dialogVisble.value = false
   if (isEditRef.value && editId.value) {
-    systemStore.editPageDataAction('department', editId.value, formData)
+    systemStore.editPageDataAction(props.modalConfig.pageName, editId.value, formData)
   } else {
-    systemStore.newPageDataAction('department', formData)
+    systemStore.newPageDataAction(props.modalConfig.pageName, formData)
   }
 }
 

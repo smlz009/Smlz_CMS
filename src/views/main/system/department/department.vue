@@ -20,17 +20,19 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import useMainStore from '@/store/main/mian'
 import PageSearch from '@/components/page-search/page-search.vue'
 import PageContent from '@/components/page-content/page-content.vue'
 import PageModal from '@/components/page-modal/page-modal.vue'
 import searchConfig from './config/search.config'
 import contentConfig from './config/content.config'
 import modalConfig from './config/modal.config'
-import { ref, computed } from 'vue'
-import useMainStore from '@/store/main/mian'
+import usePageContent from '@/hooks/usePageContent'
+import usePageModal from '@/hooks/usePageModal'
 
-const contentRef = ref<InstanceType<typeof PageContent>>()
-const modalRef = ref<InstanceType<typeof PageModal>>()
+const { contentRef, handleQueryClick, handleResetClick } = usePageContent()
+const { modalRef, handleNewClick, handleEditClick } = usePageModal()
 
 const modalConfigRef = computed(() => {
   const useMain = useMainStore()
@@ -47,22 +49,6 @@ const modalConfigRef = computed(() => {
   })
   return modalConfig
 })
-
-function handleQueryClick(formData: any) {
-  contentRef.value?.fetchPageListData(formData)
-}
-
-function handleResetClick() {
-  contentRef.value?.fetchPageListData()
-}
-
-function handleNewClick() {
-  modalRef.value?.setModalVisble()
-}
-
-function handleEditClick(itemData: any) {
-  modalRef.value?.setModalVisble(true, itemData)
-}
 </script>
 
 <style scoped lang="less">

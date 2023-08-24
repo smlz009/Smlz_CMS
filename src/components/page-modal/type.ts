@@ -1,4 +1,5 @@
 export interface IModalConfig {
+  pageName: string
   header: {
     newTitle: string
     editTitle: string
@@ -8,6 +9,7 @@ export interface IModalConfig {
 
 export interface IModalProps {
   modalConfig: {
+    pageName: string
     header: {
       newTitle: string
       editTitle: string

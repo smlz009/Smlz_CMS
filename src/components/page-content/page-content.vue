@@ -23,7 +23,7 @@
               </template>
             </el-table-column>
           </template>
-          <template v-else-if="item.type === 'handle'">
+          <template v-else-if="item.type === 'handler'">
             <el-table-column v-bind="item" align="center">
               <template #default="scope">
                 <el-button icon="Edit" type="primary" link @click="handleEditBtnClick(scope.row)">

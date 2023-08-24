@@ -12,7 +12,7 @@ const contentConfig = {
     { type: 'normal', label: '上级部门', prop: 'parentId', width: '150px' },
     { type: 'timer', label: '创建时间', prop: 'createAt' },
     { type: 'timer', label: '更新时间', prop: 'updateAt' },
-    { type: 'handle', label: '操作', width: '150px' }
+    { type: 'handler', label: '操作', width: '150px' }
   ]
 }
 
