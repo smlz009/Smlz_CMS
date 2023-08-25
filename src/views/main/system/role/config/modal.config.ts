@@ -18,6 +18,11 @@ const modalConfig: IModalConfig = {
       prop: 'intro',
       label: '角色介绍',
       placeholder: '请输入角色介绍'
+    },
+    {
+      type: 'input',
+      prop: 'intro',
+      label: '分配权限'
     }
   ]
 }
