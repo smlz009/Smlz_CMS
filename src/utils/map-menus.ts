@@ -61,3 +61,21 @@ export function mapPathCrumb(path: string, userMenus: any[]) {
 
   return crumbList
 }
+
+//映射菜单ID
+export function mapMenuListToIds(menuList: any[]) {
+  const ids: number[] = []
+
+  function recurseGetId(menus: any[]) {
+    for (const item of menus) {
+      if (item.children) {
+        recurseGetId(item.children)
+      } else {
+        ids.push(item.id)
+      }
+    }
+  }
+  recurseGetId(menuList)
+
+  return ids
+}

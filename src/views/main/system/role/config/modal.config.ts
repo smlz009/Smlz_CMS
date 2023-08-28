@@ -20,9 +20,9 @@ const modalConfig: IModalConfig = {
       placeholder: '请输入角色介绍'
     },
     {
-      type: 'input',
-      prop: 'intro',
-      label: '分配权限'
+      type: 'custom',
+      slotName: 'menuList',
+      label: '权限设置'
     }
   ]
 }

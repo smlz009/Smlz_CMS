@@ -92,10 +92,14 @@ function setModalVisble(isEdit: boolean = false, itemData?: any) {
 //确认编辑按钮
 function handleConfirm() {
   dialogVisble.value = false
+  let infoData = formData
+  if (props.otherInfo) {
+    infoData = { ...infoData, ...props.otherInfo }
+  }
   if (isEditRef.value && editId.value) {
-    systemStore.editPageDataAction(props.modalConfig.pageName, editId.value, formData)
+    systemStore.editPageDataAction(props.modalConfig.pageName, editId.value, infoData)
   } else {
-    systemStore.newPageDataAction(props.modalConfig.pageName, formData)
+    systemStore.newPageDataAction(props.modalConfig.pageName, infoData)
   }
 }
 

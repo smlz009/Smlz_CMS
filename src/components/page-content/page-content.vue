@@ -75,7 +75,7 @@ interface IProps {
       btnTitle: string
     }
     propsList: any[]
-    childrenTerr: any
+    childrenTerr?: any
   }
 }
 
