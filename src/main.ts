@@ -11,8 +11,6 @@ import icons from './global/register-icons'
 
 const app = createApp(App)
 app.use(icons) //图标
-
 app.use(store) //状态存储
-
 app.use(router) //路由
 app.mount('#app')
