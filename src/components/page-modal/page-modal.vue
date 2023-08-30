@@ -101,6 +101,7 @@ function handleConfirm() {
   } else {
     systemStore.newPageDataAction(props.modalConfig.pageName, infoData)
   }
+  //重置页码
 }
 
 defineExpose({ setModalVisble })

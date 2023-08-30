@@ -4,20 +4,22 @@ import type { IAccount } from '@/types'
 import { localCache } from '@/utils/cache'
 import router from '@/router'
 import { LOGIN_TOKEN } from '@/global/constants'
-import { mapMenusToRoutes } from '@/utils/map-menus'
+import { mapMenusToRoutes, mapMenuListToPermissions, firstMenu } from '@/utils/map-menus'
 import useMainStore from '../main/mian'
 
 interface ILoginState {
   token: string
   userInfo: any
   userMenus: any
+  permissions: string[]
 }
 
 const useLoginStore = defineStore('login', {
   state: (): ILoginState => ({
     token: '',
     userInfo: {},
-    userMenus: {}
+    userMenus: {},
+    permissions: []
   }),
   actions: {
     async loginAccountAction(account: IAccount) {
@@ -40,8 +42,18 @@ const useLoginStore = defineStore('login', {
       localCache.setCache('USER_MENUS', this.userMenus)
 
       //请求数据
-      const main = useMainStore()
-      main.fetchEntireDataAction()
+      const mainStore = useMainStore()
+      mainStore.fetchEntireDataAction()
+
+      if (localCache.getCache('MAIN_AFFIXLIST') === undefined) {
+        mainStore.affixList = [{ ...firstMenu }]
+      } else {
+        mainStore.affixList = localCache.getCache('MAIN_AFFIXLIST')
+      }
+
+      //权限按钮
+      const permissions = mapMenuListToPermissions(this.userMenus)
+      this.permissions = permissions
 
       //动态添加路由
       const routes = mapMenusToRoutes(this.userMenus)
@@ -61,11 +73,22 @@ const useLoginStore = defineStore('login', {
         this.userMenus = userMenus
 
         //请求数据
-        const main = useMainStore()
-        main.fetchEntireDataAction()
+        const mainStore = useMainStore()
+        mainStore.fetchEntireDataAction()
+
+        //权限按钮
+        const permissions = mapMenuListToPermissions(this.userMenus)
+        this.permissions = permissions
 
         //动态添加路由
         const routes = mapMenusToRoutes(this.userMenus)
+
+        //头部导航固钉
+        if (localCache.getCache('MAIN_AFFIXLIST') === undefined) {
+          mainStore.affixList = [{ ...firstMenu }]
+        } else {
+          mainStore.affixList = localCache.getCache('MAIN_AFFIXLIST')
+        }
         routes.forEach((route) => router.addRoute('main', route))
       }
     }

@@ -1,4 +1,5 @@
 export default {
   path: '/main/system/role',
-  component: () => import('@/views/main/system/role/role.vue')
+  component: () => import('@/views/main/system/role/role.vue'),
+  name: '角色管理'
 }

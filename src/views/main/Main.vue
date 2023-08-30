@@ -8,6 +8,7 @@
         <el-header height="50px">
           <main-header @fold-change="handleFoldMenu" />
         </el-header>
+        <main-affix />
         <el-main>
           <router-view />
         </el-main>
@@ -19,6 +20,7 @@
 <script setup lang="ts">
 import MainMenu from '@/components/main-menu/main-menu.vue'
 import MainHeader from '@/components/main-header/main-header.vue'
+import MainAffix from '@/components/main-affix/main-affix.vue'
 import { ref } from 'vue'
 
 const isCollapse = ref(false) //菜单是否缩放
@@ -54,6 +56,7 @@ function handleFoldMenu(isFold: boolean) {
   }
 
   .el-main {
+    padding-top: 0;
     background-color: #f0f2f5;
   }
 }

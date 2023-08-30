@@ -42,7 +42,7 @@ import type { ElTree } from 'element-plus'
 import { mapMenuListToIds } from '@/utils/map-menus'
 
 const { contentRef, handleQueryClick, handleResetClick } = usePageContent()
-const { modalRef, handleNewClick, handleEditClick } = usePageModal(editCallBack)
+const { modalRef, handleNewClick, handleEditClick } = usePageModal(newCallBack, editCallBack)
 
 const mainStore = useMainStore()
 const { entireMenus } = storeToRefs(mainStore)
@@ -56,11 +56,18 @@ function handleTreeCheck(node: any, kyes: any) {
 }
 
 const treeRef = ref<InstanceType<typeof ElTree>>()
+
+//新建按钮回调
+function newCallBack() {
+  nextTick(() => {
+    treeRef.value?.setCheckedKeys([])
+  })
+}
+
+//编辑按钮回调
 function editCallBack(itemData: any) {
   nextTick(() => {
     const ids = mapMenuListToIds(itemData.menuList)
-    console.log(ids)
-
     treeRef.value?.setCheckedKeys(ids)
   })
 }

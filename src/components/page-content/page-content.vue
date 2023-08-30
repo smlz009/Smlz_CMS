@@ -2,7 +2,7 @@
   <div class="content">
     <div class="header">
       <h2 class="title">{{ contentConfig?.header?.title ?? '数据列表' }}</h2>
-      <el-button type="primary" @click="handleNewUserClick">
+      <el-button type="primary" @click="handleNewUserClick" v-if="isCreate">
         {{ contentConfig?.header?.btnTitle ?? '新建数据' }}
       </el-button>
     </div>
@@ -26,7 +26,13 @@
           <template v-else-if="item.type === 'handler'">
             <el-table-column v-bind="item" align="center">
               <template #default="scope">
-                <el-button icon="Edit" type="primary" link @click="handleEditBtnClick(scope.row)">
+                <el-button
+                  icon="Edit"
+                  type="primary"
+                  link
+                  @click="handleEditBtnClick(scope.row)"
+                  v-if="isEdit"
+                >
                   编辑
                 </el-button>
                 <el-button
@@ -34,6 +40,7 @@
                   type="danger"
                   link
                   @click="handleDeleteBtnClick(scope.row.id)"
+                  v-if="isDelete"
                 >
                   删除
                 </el-button>
@@ -54,8 +61,8 @@
         small
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageTotalCount"
-        @size-change="fetchPageListData"
-        @current-change="fetchPageListData"
+        @update:current-page="fetchPageListData"
+        @update:page-size="fetchPageListData"
       />
     </div>
   </div>
@@ -63,6 +70,7 @@
 
 <script setup lang="ts">
 import useSystemStore from '@/store/main/system/system'
+import usePermissions from '@/hooks/usePermissions'
 import { storeToRefs } from 'pinia'
 import { formatUTC } from '@/utils/format'
 import { ref } from 'vue'
@@ -82,12 +90,20 @@ interface IProps {
 const props = defineProps<IProps>()
 const emit = defineEmits(['newClick', 'editClick'])
 
-const systemStore = useSystemStore()
+//用户权限
+const isCreate = usePermissions(`${props.contentConfig.pageName}:create`)
+const isDelete = usePermissions(`${props.contentConfig.pageName}:delete`)
+const isEdit = usePermissions(`${props.contentConfig.pageName}:update`)
+const isQuery = usePermissions(`${props.contentConfig.pageName}:query`)
+
 //页面相关数据
 const currentPage = ref(1)
 const pageSize = ref(10)
+//监听systemStore
 
 //获取用户列表数据
+const systemStore = useSystemStore()
+
 fetchPageListData()
 
 //获取用户列表
@@ -95,6 +111,7 @@ const { pageList, pageTotalCount } = storeToRefs(systemStore)
 
 //异步用户数据
 function fetchPageListData(formData: any = {}) {
+  if (!isQuery) return
   const size = pageSize.value
   const offset = (currentPage.value - 1) * size
   const queryInfo = { size, offset, ...formData }
@@ -116,6 +133,18 @@ function handleEditBtnClick(itemData: any) {
   emit('editClick', itemData)
 }
 
+systemStore.$onAction(({ name, after }) => {
+  //等待action完成后进行的回调
+  after(() => {
+    if (
+      name === 'deletePageDataByIdAction' ||
+      name === 'editPageDataAction' ||
+      name === 'newPageDataAction'
+    ) {
+      currentPage.value = 1
+    }
+  })
+})
 defineExpose({ fetchPageListData })
 </script>
 
