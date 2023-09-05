@@ -2,8 +2,11 @@
   <div class="main-affix">
     <el-affix :offset="20">
       <template v-for="(item, index) in affixList" :key="item.name">
-        <el-button @click="handelAffixClick(item)">
-          <span :class="['affix-text', item.isActive ? 'active' : '']">{{ item.name }}</span>
+        <el-button
+          @click="handelAffixClick(item)"
+          :class="['affix-text', item.isActive ? 'active' : '']"
+        >
+          <span>{{ item.name }}</span>
           <el-icon v-if="item.meta" @click.stop="handelAffixClose(item, index)"><Close /></el-icon>
         </el-button>
       </template>
@@ -31,15 +34,13 @@ function handelAffixClick(item: any) {
 function handelAffixClose(item: any, index: number) {
   mainStore.delAffixListAction(index)
 
-  if (item.isActive) {
-    let url = ''
-    if (affixList.length === 1) {
-      url = affixList[index - 1].url
-    } else {
-      url = affixList[index - 1].path
-    }
-    router.push(url)
+  let url = ''
+  if (affixList.length === 1 || index - 1 === 0) {
+    url = affixList[index - 1].url
+  } else {
+    url = affixList[index - 1].path
   }
+  router.push(url)
 }
 </script>
 
@@ -54,7 +55,9 @@ function handelAffixClose(item: any, index: number) {
   }
 
   .active {
-    color: #409eff;
+    color: var(--el-color-primary);
+    background-color: var(--el-color-primary-light-9);
+    border-color: var(--el-button-hover-border-color);
   }
 }
 </style>

@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import * as THREE from 'three'
-import dat from 'dat.gui'
+// import dat from 'dat.gui'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { onMounted } from 'vue'
 //创建场景
@@ -25,27 +25,27 @@ const renderer = new THREE.WebGLRenderer()
 //   .load(['room.jpg', 'room.jpg', 'room.jpg', 'room.jpg', 'room.jpg', 'room.jpg'])
 
 // 创建控制对象
-const controlData = {
-  rotationSpeed: 0.01,
-  color: '#66ccff',
-  wireframe: false
-}
+// const controlData = {
+//   rotationSpeed: 0.01,
+//   color: '#66ccff',
+//   wireframe: false
+// }
 
 // 创建实例
-const gui = new dat.GUI()
-const f = gui.addFolder('配置')
-// f.add(controlData, "rotationSpeed", 0.01, 0.1, 0.01)
+// const gui = new dat.GUI()
+// const f = gui.addFolder('配置')
+// // f.add(controlData, "rotationSpeed", 0.01, 0.1, 0.01)
 
-f.add(controlData, 'rotationSpeed').min(0.01).max(0.1).step(0.01)
-// 颜色选择器
-f.addColor(controlData, 'color')
+// f.add(controlData, 'rotationSpeed').min(0.01).max(0.1).step(0.01)
+// // 颜色选择器
+// f.addColor(controlData, 'color')
 
-// checkbox
-f.add(controlData, 'wireframe')
+// // checkbox
+// f.add(controlData, 'wireframe')
 
-f.domElement.id = 'gui'
+// f.domElement.id = 'gui'
 
-f.open()
+// f.open()
 
 //创建相机
 const camera = new THREE.PerspectiveCamera()
@@ -59,10 +59,22 @@ camera.position.z = 10
 //   camera.lookAt(0, 3, 0)
 // }
 
+//创建纹理
+const texture = new THREE.TextureLoader().load('textures/02-map.jpg')
+//创建立体纹理
+// const cubeTexture = new THREE.CubeTextureLoader()
+//   .setPath('/textures/')
+//   .load(['04.jpg', '01.jpg', '05.jpg', '02.jpg', '06.jpg', '03.jpg'])
+
+// scene.background = cubeTexture
+
 //创建立方体
-const geometry = new THREE.BoxGeometry()
+// const geometry = new THREE.BoxGeometry()
+//创建球体
+const geometry = new THREE.SphereGeometry(1)
 //材质
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+// const material = new THREE.MeshBasicMaterial({ map: texture, envMap: cubeTexture })
+const material = new THREE.MeshBasicMaterial({ map: texture })
 //网格
 const cube = new THREE.Mesh(geometry, material)
 cube.position.set(0, 3, 0)
@@ -95,7 +107,7 @@ renderer.render(scene, camera)
 onMounted(() => {
   const el = document.querySelector('#overview')
 
-  el?.appendChild(f.domElement)
+  // el?.appendChild(f.domElement)
   el?.appendChild(renderer.domElement)
   // 将gui添加到页面
   //调整窗口大小
@@ -104,10 +116,10 @@ onMounted(() => {
   //让立方体动起来
   function animate() {
     requestAnimationFrame(animate)
-    cube.rotation.x += controlData.rotationSpeed
-    cube.rotation.y += controlData.rotationSpeed
-    cube.material.color = new THREE.Color(controlData.color)
-    material.wireframe = controlData.wireframe
+    cube.rotation.x += 0.01
+    cube.rotation.y += 0.01
+    // cube.material.color = new THREE.Color(controlData.color)
+    // material.wireframe = controlData.wireframe
 
     //轨道控制器更新
     controls.update()
