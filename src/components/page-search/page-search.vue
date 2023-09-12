@@ -2,7 +2,7 @@
   <div class="search">
     <el-form size="large" label-width="80px" :model="searchFrom" ref="formRef">
       <el-row :gutter="20">
-        <template v-for="item in searchConfig.formItems" :key="item.props">
+        <template v-for="item in searchConfig.formItems" :key="item.prop">
           <el-col :span="8">
             <el-form-item :label="item.label" :prop="item.prop">
               <template v-if="item.type === 'input'">
