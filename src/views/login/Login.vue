@@ -15,12 +15,16 @@ let container: HTMLElement | null = null //容器
 let scene: any = '' //场景
 let camera: any = '' //相机
 let renderer: any = '' //渲染器
+let sphere: any = '' //球体网格
 
 const IMAGE_SKY = new URL('@/assets/sky.jpg', import.meta.url) //加载图片
+const IMAGE_BOX = new URL('@/assets/box.jpg', import.meta.url) //加载图片
+
 let width: number = 0 //宽度
 let height: number = 0 //高度
 let depth = 1400 //深度
 let zAxisNumber = 0 //相机在z轴的位置
+
 onMounted(() => {
   container = document.getElementById('login')
   width = container!.clientWidth
@@ -28,6 +32,8 @@ onMounted(() => {
   initScene()
   initSceneBg()
   initCamera()
+  initSphereGeometry()
+  initLight()
   initRenderer()
   initOrbitControls()
   animate()
@@ -52,6 +58,41 @@ function initSceneBg() {
     //添加到场景
     scene.add(mesh)
   })
+}
+
+//初始化球体
+function initSphereGeometry() {
+  //创建球体几何体
+  const geometry = new THREE.SphereGeometry(50, 64, 32)
+  //创建高光反射材质
+  const material = new THREE.MeshPhongMaterial()
+  //创建纹理
+  material.map = new THREE.TextureLoader().load(IMAGE_BOX)
+  //创建网格
+  sphere = new THREE.Mesh(geometry, material)
+  //球体位置
+  sphere.position.set(-400, 200, -200)
+  //添加到场景
+  scene.add(sphere)
+}
+
+//球体自转
+function renderSphereRotate() {
+  sphere.rotateY(0.01)
+}
+
+//添加光照
+function initLight() {
+  //创建环境光
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1)
+  //添加到场景
+  scene.add(ambientLight)
+  //创建点光源
+  const pointLight = new THREE.PointLight(0x0655fd, 5, 0)
+  //点光源位置
+  pointLight.position.set(0, 100, -200)
+  //添加到场景
+  scene.add(pointLight)
 }
 
 //初始化相机
@@ -89,6 +130,7 @@ function initOrbitControls() {
 //动画刷新
 function animate() {
   requestAnimationFrame(animate)
+  renderSphereRotate()
   renderer.render(scene, camera)
 }
 </script>
