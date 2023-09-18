@@ -7,6 +7,7 @@
 
 <script setup lang="ts">
 import * as THREE from 'three'
+import random from 'lodash/random'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { onMounted } from 'vue'
 // import LoginPanel from './c-cpns/login-panel.vue'
@@ -19,11 +20,18 @@ let sphere: any = '' //球体网格
 
 const IMAGE_SKY = new URL('@/assets/sky.jpg', import.meta.url) //加载图片
 const IMAGE_BOX = new URL('@/assets/box.jpg', import.meta.url) //加载图片
+const IMAGE_STAR1 = new URL('@/assets/star.jpg', import.meta.url) //加载图片
+const IMAGE_STAR2 = new URL('@/assets/dian.jpg', import.meta.url) //加载图片
 
 let width: number = 0 //宽度
 let height: number = 0 //高度
 let depth = 1400 //深度
 let zAxisNumber = 0 //相机在z轴的位置
+
+let parameters: any = '' //点的初始参数
+let materials: any = [] //点的材质
+let particles_init_portions: any = [] //点的初始位置
+let pointGeometry: any = []
 
 onMounted(() => {
   container = document.getElementById('login')
@@ -33,6 +41,11 @@ onMounted(() => {
   initSceneBg()
   initCamera()
   initSphereGeometry()
+  //定于初始位置
+  particles_init_portions = -zAxisNumber - depth / 2
+  pointGeometry = initSceneStar(particles_init_portions)
+  console.log(pointGeometry)
+
   initLight()
   initRenderer()
   initOrbitControls()
@@ -111,6 +124,57 @@ function initCamera() {
   camera.lookAt(0, 0, 0)
 }
 
+//初始化星星
+function initSceneStar(initZportions: number) {
+  //创建几何体
+  const geometry = new THREE.BufferGeometry()
+  //星星的位置坐标
+  const vertices = []
+  //创建纹理
+  const texture1 = new THREE.TextureLoader().load(IMAGE_STAR1)
+  const texture2 = new THREE.TextureLoader().load(IMAGE_STAR1)
+  //星星的数据
+  const pointGeometry = []
+  //声明点的参数
+  parameters = [
+    [[0.6, 100, 0.75], texture1, 50],
+    [[0, 0, 1], texture2, 20]
+  ]
+  //创建1500个星星
+  for (let i = 0; i < 1500; i++) {
+    const x = THREE.MathUtils.randFloatSpread(width)
+    const y = random(0, height / 2)
+    const z = random(-depth / 2, zAxisNumber)
+    vertices.push(x, y, z)
+  }
+  //物体设置坐标
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3))
+  //创建两种不同的材质
+  for (let i = 0; i < parameters.length; i++) {
+    //颜色
+    const color = parameters[i][0]
+    //纹理
+    const texture = parameters[i][1]
+    //点的大小
+    const size = parameters[i][2]
+    //设置材质
+    materials[i] = new THREE.PointsMaterial({ size, map: texture })
+    //设置颜色
+    materials[i].color.setHSL(color[0], color[1], color[2])
+    //创建物体
+    const star = new THREE.Points(geometry, materials[i])
+    //设置角度
+    star.rotation.x = Math.random() * 0.2 - 0.15
+    star.rotation.y = Math.random() * 0.2 - 0.15
+    star.rotation.z = Math.random() * 0.2 - 0.15
+    star.position.setZ(initZportions)
+    pointGeometry.push(star)
+    scene.add(star)
+  }
+
+  return pointGeometry
+}
+
 //初始化渲染器
 function initRenderer() {
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
@@ -131,6 +195,9 @@ function initOrbitControls() {
 function animate() {
   requestAnimationFrame(animate)
   renderSphereRotate()
+  pointGeometry.forEach((star: any) => {
+    star.position.z = star.position.z + 10
+  })
   renderer.render(scene, camera)
 }
 </script>
