@@ -26,5 +26,9 @@ const isLogin = ref(true)
   display: flex;
   border-radius: 10px;
   overflow: hidden;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

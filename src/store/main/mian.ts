@@ -1,6 +1,7 @@
 import { getEntireDepartments, getEntireRoles, getEntireMenus } from '@/service/main/main'
 import { defineStore } from 'pinia'
 import { localCache } from '@/utils/cache'
+import { log } from 'three/examples/jsm/nodes/Nodes.js'
 
 interface IMainState {
   entireRoles: any[]
@@ -27,6 +28,8 @@ const useMainStore = defineStore('main', {
       this.entireMenus = menusRes.data.list
     },
     addAffixListAction(item: any) {
+      //登录页面不缓存
+      if (item.path === '/login') return
       //高亮
       this.affixList.forEach((affixItem) => {
         if (affixItem.name === item.name) {

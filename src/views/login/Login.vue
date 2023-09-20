@@ -1,7 +1,7 @@
 <template>
   <div class="login" id="login">
     <!-- <h2 class="login-title">Smlz CMS</h2> -->
-    <!-- <login-panel></login-panel> -->
+    <login-panel></login-panel>
   </div>
 </template>
 
@@ -10,7 +10,7 @@ import * as THREE from 'three'
 import random from 'lodash/random'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { onMounted } from 'vue'
-// import LoginPanel from './c-cpns/login-panel.vue'
+import LoginPanel from './c-cpns/login-panel.vue'
 
 let container: HTMLElement | null = null //容器
 let scene: any = '' //场景
@@ -21,7 +21,8 @@ let sphere: any = '' //球体网格
 const IMAGE_SKY = new URL('@/assets/sky.jpg', import.meta.url) //加载图片
 const IMAGE_BOX = new URL('@/assets/box.jpg', import.meta.url) //加载图片
 const IMAGE_STAR1 = new URL('@/assets/star.jpg', import.meta.url) //加载图片
-const IMAGE_STAR2 = new URL('@/assets/dian.jpg', import.meta.url) //加载图片
+const IMAGE_STAR2 = new URL('@/assets/dian.png', import.meta.url) //加载图片
+const IMAGE_CLOUD = new URL('@/assets/cloud.png', import.meta.url) //加载图片
 
 let width: number = 0 //宽度
 let height: number = 0 //高度
@@ -30,8 +31,16 @@ let zAxisNumber = 0 //相机在z轴的位置
 
 let parameters: any = '' //点的初始参数
 let materials: any = [] //点的材质
-let particles_init_portions: any = [] //点的初始位置
-let pointGeometry: any = []
+let particles_init_portions: number = 0 //点的初始位置
+let star1_zprogress: number = 0 //声明星星1在z轴的位置
+let star2_zprogress: number = 0 //声明星星2在z轴的位置
+let star1_particles: any = [] //声明星星1
+let star2_particles: any = [] //声明星星2
+
+let cloud1 = '' //声明星云1
+let cloud2 = '' //声明星云2
+let renderCloud1: any = '' //声明星云1运动渲染函数
+let renderCloud2: any = '' //声明星云2运动渲染函数
 
 onMounted(() => {
   container = document.getElementById('login')
@@ -43,8 +52,29 @@ onMounted(() => {
   initSphereGeometry()
   //定于初始位置
   particles_init_portions = -zAxisNumber - depth / 2
-  pointGeometry = initSceneStar(particles_init_portions)
-  console.log(pointGeometry)
+  star1_zprogress = particles_init_portions
+  star2_zprogress = particles_init_portions * 2
+  star1_particles = initSceneStar(particles_init_portions)
+  star2_particles = initSceneStar(star2_zprogress)
+  cloud1 = initCloud(400, 200)
+  cloud2 = initCloud(200, 100)
+  renderCloud1 = renderCloudRun(
+    cloud1,
+    [
+      new THREE.Vector3(-width / 10, 0, -depth / 2),
+      new THREE.Vector3(-width / 4, height / 8, 0),
+      new THREE.Vector3(-width / 4, 0, zAxisNumber)
+    ],
+    0.0002
+  )
+  renderCloud2 = renderCloudRun(
+    cloud2,
+    [
+      new THREE.Vector3(width / 8, height / 18, -depth / 2),
+      new THREE.Vector3(width / 8, height / 8, zAxisNumber)
+    ],
+    0.0008
+  )
 
   initLight()
   initRenderer()
@@ -132,7 +162,7 @@ function initSceneStar(initZportions: number) {
   const vertices = []
   //创建纹理
   const texture1 = new THREE.TextureLoader().load(IMAGE_STAR1)
-  const texture2 = new THREE.TextureLoader().load(IMAGE_STAR1)
+  const texture2 = new THREE.TextureLoader().load(IMAGE_STAR2)
   //星星的数据
   const pointGeometry = []
   //声明点的参数
@@ -158,7 +188,13 @@ function initSceneStar(initZportions: number) {
     //点的大小
     const size = parameters[i][2]
     //设置材质
-    materials[i] = new THREE.PointsMaterial({ size, map: texture })
+    materials[i] = new THREE.PointsMaterial({
+      size,
+      map: texture,
+      blending: THREE.AdditiveBlending,
+      transparent: true,
+      depthTest: true
+    })
     //设置颜色
     materials[i].color.setHSL(color[0], color[1], color[2])
     //创建物体
@@ -173,6 +209,75 @@ function initSceneStar(initZportions: number) {
   }
 
   return pointGeometry
+}
+
+//星星的运动
+function renderStarRun() {
+  //星星颜色的交替变化
+  const time = Date.now() * 0.00005
+  for (let i = 0; i < parameters.length; i++) {
+    const color = parameters[i][0]
+    const h = ((360 * (color[0] + time)) % 360) / 360
+    materials[i].color.setHSL(color[0], color[1], parseFloat(h.toFixed(2)))
+  }
+  //星星的运动
+  star1_zprogress += 10
+  star2_zprogress += 10
+  if (star1_zprogress > zAxisNumber + depth / 2) {
+    star1_zprogress = particles_init_portions
+  } else {
+    star1_particles.forEach((item: any) => {
+      item.position.setZ(star1_zprogress)
+    })
+  }
+
+  if (star2_zprogress > zAxisNumber + depth / 2) {
+    star2_zprogress = particles_init_portions
+  } else {
+    star2_particles.forEach((item: any) => {
+      item.position.setZ(star2_zprogress)
+    })
+  }
+}
+
+//初始化星云
+function initCloud(w: number, h: number) {
+  //创建片形
+  const geometry = new THREE.PlaneGeometry(w, h)
+  //创建纹理
+  const texture = new THREE.TextureLoader().load(IMAGE_CLOUD)
+  //创建普通材质
+  const mesh = new THREE.MeshBasicMaterial({
+    map: texture,
+    blending: THREE.AdditiveBlending,
+    transparent: true,
+    depthTest: false
+  })
+  //创建网格
+  const cloud = new THREE.Mesh(geometry, mesh)
+  //渲染
+  scene.add(cloud)
+
+  return cloud
+}
+
+//星云的运动
+function renderCloudRun(cloud: any, route: any, speed: number) {
+  let cloudProgress = 0
+  //创建运动的轨迹
+  const curve = new THREE.CatmullRomCurve3(route)
+  return () => {
+    if (cloudProgress <= 1) {
+      cloudProgress += speed
+      //获取当前位置
+      const point = curve.getPoint(cloudProgress)
+      if (point && point.x) {
+        cloud.position.set(point.x, point.y, point.z)
+      }
+    } else {
+      cloudProgress = 0
+    }
+  }
 }
 
 //初始化渲染器
@@ -195,9 +300,10 @@ function initOrbitControls() {
 function animate() {
   requestAnimationFrame(animate)
   renderSphereRotate()
-  pointGeometry.forEach((star: any) => {
-    star.position.z = star.position.z + 10
-  })
+  renderStarRun()
+  renderCloud1()
+  renderCloud2()
+
   renderer.render(scene, camera)
 }
 </script>
