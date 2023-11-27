@@ -1,8 +1,8 @@
 {
-  "redirects": [
+  "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "http://47.107.128.145:8000"
+      "destination": "/"
     }
   ]
 }

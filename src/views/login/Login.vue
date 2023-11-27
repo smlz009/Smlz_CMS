@@ -1,6 +1,6 @@
 <template>
   <div class="login" id="login">
-    <!-- <h2 class="login-title">Smlz CMS</h2> -->
+    <h2 class="login-title">Smlz CMS</h2>
     <login-panel></login-panel>
     <el-button @click="a">555</el-button>
   </div>
@@ -11,12 +11,6 @@ import LoginPanel from './c-cpns/login-panel.vue'
 
 const a = () => {
   console.log(444)
-
-  // fetch('http://47.107.128.145:8000/monent/list?offset=0&size=5', {
-  //   method: 'GET'
-  // }).then((res) => {
-  //   console.log(res)
-  // })
 }
 </script>
 
