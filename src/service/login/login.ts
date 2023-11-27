@@ -1,6 +1,13 @@
 import $request from '..'
 import type { IAccount } from '@/types'
 
+export function createLoginRequset(account: IAccount) {
+  return $request.post({
+    url: '/user/create',
+    data: account
+  })
+}
+
 export function accountLoginRequset(account: IAccount) {
   return $request.post({
     url: '/login',
@@ -10,7 +17,7 @@ export function accountLoginRequset(account: IAccount) {
 
 export function getUserInfoById(id: number) {
   return $request.get({
-    url: `/users/${id}`
+    url: `/user/${id}`
   })
 }
 

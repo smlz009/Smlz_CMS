@@ -1,10 +1,24 @@
 <template>
   <div :class="['pane-register', !isLogin ? '' : 'active']">
     <transition name="slide">
-      <el-form v-if="!isLogin">
+      <el-form :model="account" :rules="accountRules" ref="formRef" v-if="!isLogin">
         <div class="register-title">注册帐号</div>
-        <el-input placeholder="帐号" class="register-account" size="large"></el-input>
-        <el-input placeholder="密码" size="large"></el-input>
+        <el-form-item prop="name">
+          <el-input
+            placeholder="帐号"
+            class="register-account"
+            size="large"
+            v-model="account.name"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            placeholder="密码"
+            size="large"
+            v-model="account.password"
+            show-password
+          ></el-input>
+        </el-form-item>
         <el-button @click="registerAction" class="register-btn">点击注册</el-button>
       </el-form>
       <el-button v-else class="no-btn" @click="emit('update:isLogin', false)">
@@ -15,12 +29,42 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessage } from 'element-plus'
+import { ref, reactive } from 'vue'
+import type { FormRules, ElForm } from 'element-plus'
+import type { IAccount } from '@/types'
+import useLoginStore from '@/store/login/login'
+
 defineProps(['isLogin'])
 const emit = defineEmits(['update:isLogin'])
+const loginStore = useLoginStore()
+
+//注册数据
+const account = reactive<IAccount>({
+  name: '',
+  password: ''
+})
+
+//获取表单ref
+const formRef = ref<InstanceType<typeof ElForm>>()
+
+//表单规则
+const accountRules: FormRules = {
+  name: [{ required: true, message: '请输入帐号', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+}
 
 function registerAction() {
-  ElMessage.error('暂无注册功能，请使用默认帐号')
+  formRef.value?.validate((valid) => {
+    if (valid) {
+      const { name, password } = account
+      //发送异步请求 进行登陆
+      loginStore.createUserAction({ name, password }, () => {
+        emit('update:isLogin', true)
+      })
+    } else {
+      ElMessage.error('请填写完整信息，并且进行校验')
+    }
+  })
 }
 </script>
 
@@ -46,7 +90,6 @@ function registerAction() {
     text-align: center;
   }
   .register-account {
-    margin-bottom: 20px;
     height: 40px;
   }
   .register-btn {

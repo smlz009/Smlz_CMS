@@ -34,12 +34,12 @@ router.beforeEach((to) => {
     return '/login'
   }
 
-  if (to.path === '/main') {
-    return firstMenu.url
-  }
+  // if (to.path === '/main') {
+  //   return firstMenu.url
+  // }
 
   //缓存到头部
-  useMainStore().addAffixListAction(to)
+  // useMainStore().addAffixListAction(to)
 })
 
 export default router

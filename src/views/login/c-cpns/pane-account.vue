@@ -39,8 +39,8 @@ const loginStore = useLoginStore()
 
 //登录数据
 const account = reactive<IAccount>({
-  name: 'coderwhy',
-  password: '123456'
+  name: '',
+  password: ''
 })
 
 //获取表单ref

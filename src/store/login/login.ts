@@ -1,5 +1,10 @@
 import { defineStore } from 'pinia'
-import { accountLoginRequset, getUserInfoById, getUserMenuByRoleId } from '@/service/login/login'
+import {
+  accountLoginRequset,
+  getUserInfoById,
+  getUserMenuByRoleId,
+  createLoginRequset
+} from '@/service/login/login'
 import type { IAccount } from '@/types'
 import { localCache } from '@/utils/cache'
 import router from '@/router'
@@ -34,30 +39,30 @@ const useLoginStore = defineStore('login', {
       this.userInfo = userInfoRes.data
 
       //获取用户菜单
-      const userMenuRes = await getUserMenuByRoleId(this.userInfo.role.id)
-      this.userMenus = userMenuRes.data
+      // const userMenuRes = await getUserMenuByRoleId(this.userInfo.role.id)
+      // this.userMenus = userMenuRes.data
 
       //进行本地缓存
-      localCache.setCache('USER_INFO', this.userInfo)
-      localCache.setCache('USER_MENUS', this.userMenus)
+      // localCache.setCache('USER_INFO', this.userInfo)
+      // localCache.setCache('USER_MENUS', this.userMenus)
 
       //请求数据
-      const mainStore = useMainStore()
-      mainStore.fetchEntireDataAction()
+      // const mainStore = useMainStore()
+      // mainStore.fetchEntireDataAction()
 
-      if (localCache.getCache('MAIN_AFFIXLIST') === undefined) {
-        mainStore.affixList = [{ ...firstMenu }]
-      } else {
-        mainStore.affixList = localCache.getCache('MAIN_AFFIXLIST')
-      }
+      // if (localCache.getCache('MAIN_AFFIXLIST') === undefined) {
+      //   mainStore.affixList = [{ ...firstMenu }]
+      // } else {
+      //   mainStore.affixList = localCache.getCache('MAIN_AFFIXLIST')
+      // }
 
       //权限按钮
-      const permissions = mapMenuListToPermissions(this.userMenus)
-      this.permissions = permissions
+      // const permissions = mapMenuListToPermissions(this.userMenus)
+      // this.permissions = permissions
 
       //动态添加路由
-      const routes = mapMenusToRoutes(this.userMenus)
-      routes.forEach((route) => router.addRoute('main', route))
+      // const routes = mapMenusToRoutes(this.userMenus)
+      // routes.forEach((route) => router.addRoute('main', route))
 
       //跳转页面
       router.push('/main')
@@ -90,6 +95,21 @@ const useLoginStore = defineStore('login', {
           mainStore.affixList = localCache.getCache('MAIN_AFFIXLIST')
         }
         routes.forEach((route) => router.addRoute('main', route))
+      }
+    },
+    async createUserAction(account: IAccount, cb: () => void) {
+      const res = await createLoginRequset(account)
+      if (res.code == 0) {
+        ElMessage({
+          type: 'success',
+          message: res.message
+        })
+        cb()
+      } else {
+        ElMessage({
+          type: 'error',
+          message: res.message
+        })
       }
     }
   }
