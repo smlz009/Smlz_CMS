@@ -10,13 +10,13 @@
 import LoginPanel from './c-cpns/login-panel.vue'
 
 const a = () => {
-  fetch('http://47.107.128.145:8000/monent/list?offset=0&size=5', {
-    method: 'GET'
-  }).then((res) => {
-    console.log(333)
+  console.log(444)
 
-    console.log(res)
-  })
+  // fetch('http://47.107.128.145:8000/monent/list?offset=0&size=5', {
+  //   method: 'GET'
+  // }).then((res) => {
+  //   console.log(res)
+  // })
 }
 </script>
 
