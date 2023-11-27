@@ -13,7 +13,7 @@ const a = () => {
   fetch('http://47.107.128.145:8000/monent/list?offset=0&size=5', {
     method: 'GET'
   }).then((res) => {
-    console.log(222)
+    console.log(333)
 
     console.log(res)
   })
