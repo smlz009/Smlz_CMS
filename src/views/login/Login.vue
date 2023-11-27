@@ -2,11 +2,22 @@
   <div class="login" id="login">
     <!-- <h2 class="login-title">Smlz CMS</h2> -->
     <login-panel></login-panel>
+    <el-button @click="a">555</el-button>
   </div>
 </template>
 
 <script setup lang="ts">
 import LoginPanel from './c-cpns/login-panel.vue'
+
+const a = () => {
+  fetch('http://47.107.128.145:8000/monent/list?offset=0&size=5', {
+    method: 'GET'
+  }).then((res) => {
+    console.log(222)
+
+    console.log(res)
+  })
+}
 </script>
 
 <style scoped lang="less">
