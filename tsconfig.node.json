@@ -12,7 +12,7 @@
     "module": "ESNext",
     "types": ["node"],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   }
 }
