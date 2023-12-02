@@ -3,7 +3,6 @@ import { LOGIN_TOKEN } from '@/global/constants'
 import { localCache } from '@/utils/cache'
 import { firstMenu } from '@/utils/map-menus'
 import useMainStore from '@/store/main/mian'
-import Login from '@/views/login/login.vue'
 
 const router = createRouter({
   history: createWebHashHistory(), //hash模式
@@ -14,12 +13,12 @@ const router = createRouter({
     },
     {
       path: '/login',
-      component: Login
+      component: () => import('@/views/login/Login.vue')
     },
     {
       path: '/main',
       name: 'main',
-      component: () => import('@/views/main/main.vue')
+      component: () => import('@/views/main/Main.vue')
     },
     {
       path: '/:patchMatch(.*)',
