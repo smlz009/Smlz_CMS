@@ -10,7 +10,7 @@
 import LoginPanel from './c-cpns/login-panel.vue'
 
 const a = () => {
-  console.log(555)
+  console.log(6)
 }
 </script>
 
