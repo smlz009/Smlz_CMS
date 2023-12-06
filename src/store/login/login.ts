@@ -43,7 +43,7 @@ const useLoginStore = defineStore('login', {
       // this.userMenus = userMenuRes.data
 
       //进行本地缓存
-      // localCache.setCache('USER_INFO', this.userInfo)
+      localCache.setCache('USER_INFO', this.userInfo)
       // localCache.setCache('USER_MENUS', this.userMenus)
 
       //请求数据

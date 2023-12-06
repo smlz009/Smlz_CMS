@@ -18,7 +18,19 @@ const router = createRouter({
     {
       path: '/main',
       name: 'main',
-      component: () => import('@/views/main/Main.vue')
+      component: () => import('@/views/main/Main.vue'),
+      children: [
+        {
+          path: '/main/system/role',
+          component: () => import('@/views/main/system/role/role.vue'),
+          name: '角色管理'
+        },
+        {
+          path: '/main/system/menu',
+          name: '菜单管理',
+          component: () => import('@/views/main/system/menu/menu.vue')
+        }
+      ]
     },
     {
       path: '/:patchMatch(.*)',
@@ -29,15 +41,13 @@ const router = createRouter({
 
 //导航守卫
 router.beforeEach((to) => {
-  const token = localCache.getCache(LOGIN_TOKEN)
-  if (to.path.startsWith('/main') && !token) {
-    return '/login'
-  }
-
+  // const token = localCache.getCache(LOGIN_TOKEN)
+  // if (to.path.startsWith('/main') && !token) {
+  //   return '/login'
+  // }
   // if (to.path === '/main') {
   //   return firstMenu.url
   // }
-
   //缓存到头部
   // useMainStore().addAffixListAction(to)
 })

@@ -7,7 +7,7 @@
     </div>
     <div class="content">
       <div class="breadcrumb">
-        <header-crumb />
+        <!-- <header-crumb /> -->
       </div>
       <div class="info">
         <header-info />

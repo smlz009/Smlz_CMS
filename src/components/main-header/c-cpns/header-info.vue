@@ -5,11 +5,17 @@
         <el-icon><Message /></el-icon>
       </span>
       <span>
-        <span class="dot"></span>
+        <b class="dot"></b>
         <el-icon><ChatDotRound /></el-icon>
       </span>
       <span>
         <el-icon><Search /></el-icon>
+      </span>
+      <span @click="changeTheme">
+        <transition name="fade" mode="out-in">
+          <Sun :width="'30px'" :height="'30px'" v-if="theme" />
+          <Moon :width="'20px'" :height="'20px'" v-else />
+        </transition>
       </span>
     </div>
     <div class="info">
@@ -19,7 +25,7 @@
             :size="30"
             src="https://foruda.gitee.com/avatar/1677093728847255252/7742932_smlz009_1625212746.png!avatar200"
           />
-          <span class="name">smlz009</span>
+          <span class="name">{{ name }}</span>
         </span>
         <template #dropdown>
           <el-dropdown-menu>
@@ -42,6 +48,18 @@
 import { LOGIN_TOKEN } from '@/global/constants'
 import { localCache } from '@/utils/cache'
 import { useRouter } from 'vue-router'
+import useLoginStore from '@/store/login/login'
+import useMainStore from '@/store/main/mian'
+import { storeToRefs } from 'pinia'
+import { setTheme } from '@/utils/theme-util'
+import Sun from '@/svg/sun.vue'
+import Moon from '@/svg/moon.vue'
+
+const loginStore = useLoginStore()
+const mainStore = useMainStore()
+
+const { name } = loginStore.userInfo
+const { theme } = storeToRefs(mainStore)
 
 const ruter = useRouter()
 
@@ -51,6 +69,12 @@ function handleExit() {
   localCache.removeCache('USER_INFO')
   localCache.removeCache('USER_MENUS')
   ruter.push('/login')
+}
+
+//更改主题
+function changeTheme() {
+  mainStore.changeThemeStatus()
+  setTheme()
 }
 </script>
 
@@ -70,9 +94,23 @@ function handleExit() {
     justify-content: center;
     width: 40px;
     height: 35px;
+    color: var(--theme-color);
+    cursor: pointer;
 
+    &::after {
+      width: 0;
+      background-color: #49d4c6;
+      bottom: 0px;
+      content: '';
+      height: 3px;
+      left: 5px;
+      position: absolute;
+      transition: all 0.5s ease;
+    }
     &:hover {
-      background: #f2f2f2;
+      &::after {
+        width: 30px;
+      }
     }
 
     i {
@@ -98,6 +136,7 @@ function handleExit() {
     cursor: pointer;
 
     .name {
+      color: var(--theme-color);
       margin-left: 5px;
     }
   }
@@ -110,5 +149,15 @@ function handleExit() {
   .el-tooltip__trigger:focus-visible {
     outline: unset;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.65s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

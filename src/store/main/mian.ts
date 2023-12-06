@@ -1,13 +1,13 @@
 import { getEntireDepartments, getEntireRoles, getEntireMenus } from '@/service/main/main'
 import { defineStore } from 'pinia'
 import { localCache } from '@/utils/cache'
-import { log } from 'three/examples/jsm/nodes/Nodes.js'
 
 interface IMainState {
   entireRoles: any[]
   entireDepartments: any[]
   entireMenus: any[]
   affixList: any[]
+  theme: boolean
 }
 
 const useMainStore = defineStore('main', {
@@ -15,7 +15,8 @@ const useMainStore = defineStore('main', {
     entireRoles: [],
     entireDepartments: [],
     entireMenus: [],
-    affixList: []
+    affixList: [],
+    theme: true
   }),
   actions: {
     async fetchEntireDataAction() {
@@ -51,6 +52,9 @@ const useMainStore = defineStore('main', {
       //删除图钉
       this.affixList.splice(index, 1)
       localCache.setCache('MAIN_AFFIXLIST', this.affixList)
+    },
+    changeThemeStatus() {
+      this.theme = !this.theme
     }
   }
 })

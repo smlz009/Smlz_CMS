@@ -2,13 +2,13 @@
   <div class="main">
     <el-container class="main-content">
       <el-aside :width="isCollapse ? '60px' : '210px'">
-        <main-menu :isCollapse="isCollapse" />
+        <!-- <main-menu :isCollapse="isCollapse" /> -->
       </el-aside>
       <el-container>
         <el-header height="50px">
           <main-header @fold-change="handleFoldMenu" />
         </el-header>
-        <main-affix />
+        <!-- <main-affix /> -->
         <el-main>
           <router-view />
         </el-main>
@@ -33,18 +33,18 @@ function handleFoldMenu(isFold: boolean) {
 <style scoped lang="less">
 .main {
   height: 100%;
+  color: var(--theme-color);
+  background-color: var(--theme-bg);
 }
 
 .main-content {
-  height: 100%;
-
+  height: 100vh;
   .el-aside {
     overflow-x: hidden;
     overflow-y: auto;
     line-height: 200px;
     text-align: left;
     cursor: pointer;
-    background-color: #001529;
     scrollbar-width: none; /* firefox */
     -ms-overflow-style: none; /* IE 10+ */
 
@@ -57,7 +57,8 @@ function handleFoldMenu(isFold: boolean) {
 
   .el-main {
     padding-top: 0;
-    background-color: #f0f2f5;
+    background-color: var(--theme-bg);
+    color: var(--theme-color);
   }
 }
 </style>
