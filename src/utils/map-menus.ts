@@ -22,6 +22,7 @@ export function mapMenusToRoutes(userMenus: any[]) {
   for (const menu of userMenus) {
     if (menu.children?.length) {
       for (const subMenu of menu.children) {
+        console.log(1, menu.children)
         const route = localRoutes.find((item) => item.path === subMenu.url)
         if (route) {
           if (!routes.find((item) => item.path === menu.url)) {
@@ -34,6 +35,7 @@ export function mapMenusToRoutes(userMenus: any[]) {
         }
       }
     } else {
+      console.log(1, menu)
       const route = localRoutes.find((item) => item.path === menu.url)
       if (route) {
         routes.push(route)

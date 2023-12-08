@@ -2,16 +2,11 @@
   <div class="login" id="login">
     <h2 class="login-title">Smlz CMS</h2>
     <login-panel></login-panel>
-    <el-button @click="a">555</el-button>
   </div>
 </template>
 
 <script setup lang="ts">
 import LoginPanel from './c-cpns/login-panel.vue'
-
-const a = () => {
-  console.log(6)
-}
 </script>
 
 <style scoped lang="less">
