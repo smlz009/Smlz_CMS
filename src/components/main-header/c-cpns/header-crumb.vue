@@ -22,4 +22,8 @@ const curmbList = computed(() => {
 })
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+:deep(.el-breadcrumb__inner.is-link) {
+  color: var(--theme-color);
+}
+</style>

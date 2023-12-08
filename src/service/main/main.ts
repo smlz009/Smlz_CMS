@@ -13,7 +13,7 @@ export function getEntireDepartments() {
 }
 
 export function getEntireMenus() {
-  return $request.post({
+  return $request.get({
     url: '/menu/list'
   })
 }

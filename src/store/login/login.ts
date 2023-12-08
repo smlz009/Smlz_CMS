@@ -39,12 +39,11 @@ const useLoginStore = defineStore('login', {
       this.userInfo = userInfoRes.data
 
       //获取用户菜单
-      // const userMenuRes = await getUserMenuByRoleId(this.userInfo.role.id)
-      // this.userMenus = userMenuRes.data
+      this.userMenus = userInfoRes.data.menu
 
       //进行本地缓存
       localCache.setCache('USER_INFO', this.userInfo)
-      // localCache.setCache('USER_MENUS', this.userMenus)
+      localCache.setCache('USER_MENUS', this.userMenus)
 
       //请求数据
       // const mainStore = useMainStore()
@@ -61,14 +60,14 @@ const useLoginStore = defineStore('login', {
       // this.permissions = permissions
 
       //动态添加路由
-      // const routes = mapMenusToRoutes(this.userMenus)
-      // routes.forEach((route) => router.addRoute('main', route))
+      const routes = mapMenusToRoutes(this.userMenus)
+      routes.forEach((route) => router.addRoute('main', route))
 
       //跳转页面
       router.push('/main')
     },
     //刷新页面重新加载数据
-    loadLocalCacheAction() {
+    async loadLocalCacheAction() {
       const token = localCache.getCache(LOGIN_TOKEN)
       const userInfo = localCache.getCache('USER_INFO')
       const userMenus = localCache.getCache('USER_MENUS')

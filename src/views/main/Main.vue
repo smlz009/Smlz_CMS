@@ -2,7 +2,7 @@
   <div class="main">
     <el-container class="main-content">
       <el-aside :width="isCollapse ? '60px' : '210px'">
-        <!-- <main-menu :isCollapse="isCollapse" /> -->
+        <main-menu :isCollapse="isCollapse" />
       </el-aside>
       <el-container>
         <el-header height="50px">
@@ -45,9 +45,9 @@ function handleFoldMenu(isFold: boolean) {
     line-height: 200px;
     text-align: left;
     cursor: pointer;
+    border-right: 1px solid var(--theme-boder-color);
     scrollbar-width: none; /* firefox */
     -ms-overflow-style: none; /* IE 10+ */
-
     transition: width 0.3s ease;
 
     &::-webkit-scrollbar {

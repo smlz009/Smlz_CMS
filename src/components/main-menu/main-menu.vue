@@ -5,29 +5,35 @@
       <h2 class="title" v-show="!isCollapse">Smlz CMS</h2>
     </div>
     <div class="menu">
-      <el-menu
-        :default-active="defaultActive"
-        text-color="#b7bdc3"
-        active-text-color="#fff"
-        background-color="#001529"
-        :collapse="isCollapse"
-      >
-        <el-sub-menu :index="item.id + ''" v-for="item in userMenus" :key="item.id">
-          <template #title>
-            <el-icon>
-              <component :is="item.icon.split('el-icon')[1]" />
-            </el-icon>
-            <span>{{ item.name }}</span>
+      <el-menu :default-active="defaultActive" :collapse="isCollapse">
+        <template v-for="item in userMenus">
+          <template v-if="item.children && item.children.length > 0">
+            <el-sub-menu :index="item.id + ''" :key="item.id">
+              <template #title>
+                <el-icon>
+                  <component :is="item.icon" />
+                </el-icon>
+                <span>{{ item.name }}</span>
+              </template>
+              <el-menu-item
+                v-for="c in item.children"
+                :key="c.id"
+                :index="c.id + ''"
+                @click="handelMenuClick(c)"
+              >
+                {{ c.name }}
+              </el-menu-item>
+            </el-sub-menu>
           </template>
-          <el-menu-item
-            v-for="c in item.children"
-            :key="c.id"
-            :index="c.id + ''"
-            @click="handelMenuClick(c)"
-          >
-            {{ c.name }}
-          </el-menu-item>
-        </el-sub-menu>
+          <template v-else>
+            <el-menu-item @click="handelMenuClick(item)" :key="item.id">
+              <el-icon>
+                <component :is="item.icon" />
+              </el-icon>
+              {{ item.name }}
+            </el-menu-item>
+          </template>
+        </template>
       </el-menu>
     </div>
   </div>
@@ -81,27 +87,31 @@ const defaultActive = computed(() => {
   .title {
     font-size: 20px;
     font-weight: 700;
-    color: white;
+    color: var(--theme-color);
     white-space: nowrap;
   }
 }
 .el-menu {
   border-right: none;
   user-select: none;
+  color: var(--theme-color);
 }
 
 .el-sub-menu {
   .el-menu-item {
     padding-left: 50px;
-    background-color: #0c2135;
+  }
+  :deep(.el-sub-menu__title) {
+    color: var(--theme-color);
+    background-color: var(--theme-bg);
   }
 
   .el-menu-item:hover {
-    color: #fff;
+    color: #49d4c6;
   }
 
   .el-menu-item.is-active {
-    background-color: #2d8cf0;
+    background-color: var(--theme-bg);
   }
 }
 </style>

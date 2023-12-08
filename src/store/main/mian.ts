@@ -20,13 +20,14 @@ const useMainStore = defineStore('main', {
   }),
   actions: {
     async fetchEntireDataAction() {
-      const rolesRes = await getEntireRoles()
-      const departmentsRes = await getEntireDepartments()
+      // const rolesRes = await getEntireRoles()
+      // const departmentsRes = await getEntireDepartments()
       const menusRes = await getEntireMenus()
 
-      this.entireRoles = rolesRes.data.list
-      this.entireDepartments = departmentsRes.data.list
-      this.entireMenus = menusRes.data.list
+      // this.entireRoles = rolesRes.data.list
+      // this.entireDepartments = departmentsRes.data.list
+
+      this.entireMenus = menusRes.list
     },
     addAffixListAction(item: any) {
       //登录页面不缓存

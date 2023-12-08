@@ -23,6 +23,6 @@ export function getUserInfoById(id: number) {
 
 export function getUserMenuByRoleId(id: number) {
   return $request.get({
-    url: `/role/${id}/menu`
+    url: `/menu/list`
   })
 }
