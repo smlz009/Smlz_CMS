@@ -99,7 +99,7 @@ function changeTheme() {
 
     &::after {
       width: 0;
-      background-color: #49d4c6;
+      background-color: var(--theme-active-color);
       bottom: 0px;
       content: '';
       height: 3px;

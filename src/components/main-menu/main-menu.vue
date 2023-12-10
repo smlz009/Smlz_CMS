@@ -4,8 +4,8 @@
       <img class="img" src="@/assets/img/logo.png" alt="" />
       <h2 class="title" v-show="!isCollapse">Smlz CMS</h2>
     </div>
-    <div class="menu">
-      <el-menu :default-active="defaultActive" :collapse="isCollapse">
+    <div>
+      <el-menu class="el-menu" :default-active="defaultActive" :collapse="isCollapse">
         <template v-for="item in userMenus">
           <template v-if="item.children && item.children.length > 0">
             <el-sub-menu :index="item.id + ''" :key="item.id">
@@ -26,11 +26,9 @@
             </el-sub-menu>
           </template>
           <template v-else>
-            <el-menu-item @click="handelMenuClick(item)" :key="item.id">
-              <el-icon>
-                <component :is="item.icon" />
-              </el-icon>
-              {{ item.name }}
+            <el-menu-item @click="handelMenuClick(item)" :index="item.id + ''" :key="item.id">
+              <el-icon><component :is="item.icon" /></el-icon>
+              <template #title> {{ item.name }}</template>
             </el-menu-item>
           </template>
         </template>
@@ -94,6 +92,9 @@ const defaultActive = computed(() => {
 .el-menu {
   border-right: none;
   user-select: none;
+  background-color: var(--theme-bg);
+}
+.el-menu-item {
   color: var(--theme-color);
 }
 
@@ -101,17 +102,19 @@ const defaultActive = computed(() => {
   .el-menu-item {
     padding-left: 50px;
   }
-  :deep(.el-sub-menu__title) {
-    color: var(--theme-color);
-    background-color: var(--theme-bg);
-  }
+}
+:deep(.el-sub-menu__title) {
+  color: var(--theme-color);
+}
 
-  .el-menu-item:hover {
-    color: #49d4c6;
-  }
+:deep(.el-menu--inline) {
+  background-color: var(--theme-bg);
+}
 
-  .el-menu-item.is-active {
-    background-color: var(--theme-bg);
-  }
+.el-menu-item.is-active {
+  color: var(--theme-active-color);
+}
+.el-menu-item:hover {
+  color: var(--theme-active-color);
 }
 </style>
